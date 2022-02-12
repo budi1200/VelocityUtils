@@ -25,6 +25,7 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
+    implementation(kotlin("stdlib-jdk8"))
 
     // Velocity
     compileOnly("com.velocitypowered:velocity-api:3.0.1")
