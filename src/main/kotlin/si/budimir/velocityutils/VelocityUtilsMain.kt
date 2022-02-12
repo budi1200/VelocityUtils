@@ -7,11 +7,13 @@ import com.velocitypowered.api.plugin.Plugin
 import com.velocitypowered.api.plugin.annotation.DataDirectory
 import com.velocitypowered.api.proxy.ProxyServer
 import org.slf4j.Logger
+import si.budimir.velocityutils.commands.VelocityUtilsCommand
 import si.budimir.velocityutils.config.AliasConfig
 import si.budimir.velocityutils.config.MainConfig
 import si.budimir.velocityutils.config.data.AliasConfigData
 import si.budimir.velocityutils.config.data.MainConfigData
 import si.budimir.velocityutils.enums.Constants
+import si.budimir.velocityutils.util.MessageHelper
 import java.nio.file.Path
 import java.time.Duration
 import java.time.Instant
@@ -47,6 +49,9 @@ class VelocityUtilsMain {
     // Alias Manager
     lateinit var aliasManager: AliasManager
 
+    // Commands
+    lateinit var velocityUtilsCommand: VelocityUtilsCommand
+
     companion object {
         lateinit var instance: VelocityUtilsMain
     }
@@ -63,6 +68,9 @@ class VelocityUtilsMain {
         mainConfigObj = MainConfig(this)
         mainConfig = mainConfigObj.getConfig()
 
+        // Load message helper
+        MessageHelper.load(this)
+
         // Alias Config
         aliasConfigObj = AliasConfig(this)
         aliasConfig = aliasConfigObj.getConfig()
@@ -70,6 +78,10 @@ class VelocityUtilsMain {
         // Init alias manager
         aliasManager = AliasManager(this)
         aliasManager.registerCommands()
+
+        // Register command(s)
+        velocityUtilsCommand = VelocityUtilsCommand(this)
+        commandManager.register("vutils", velocityUtilsCommand)
 
         val loadTime = Duration.between(startTime, Instant.now())
         logger.info("VelocityUtils loaded (took ${loadTime.toMillis()}ms)")
