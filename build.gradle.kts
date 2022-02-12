@@ -49,6 +49,7 @@ tasks.shadowJar {
         "net.kyori.adventure.text.minimessage",
         "si.budimir.velocityutils.libs.net.kyori.adventure.text.minimessage"
     )
+    relocate("org.spongepowered", "si.budimir.velocityutils.libs.org.spongepowered")
 }
 
 blossom {
