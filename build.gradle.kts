@@ -34,10 +34,11 @@ dependencies {
     // Configurate
     implementation("org.spongepowered:configurate-hocon:4.1.2")
     implementation("org.spongepowered:configurate-extra-kotlin:4.1.2")
+    implementation("net.kyori:adventure-serializer-configurate4:4.9.3")
 
     // Adventure
     implementation("net.kyori:adventure-extra-kotlin:4.9.3")
-    implementation("net.kyori:adventure-text-minimessage:4.1.0-SNAPSHOT")
+    implementation("net.kyori:adventure-text-minimessage:4.2.0-SNAPSHOT")
 }
 
 tasks.shadowJar {

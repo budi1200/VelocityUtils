@@ -9,10 +9,13 @@ import com.velocitypowered.api.proxy.ProxyServer
 import org.slf4j.Logger
 import si.budimir.velocityutils.commands.VelocityUtilsCommand
 import si.budimir.velocityutils.config.AliasConfig
+import si.budimir.velocityutils.config.CustomMessagesConfig
 import si.budimir.velocityutils.config.MainConfig
 import si.budimir.velocityutils.config.data.AliasConfigData
+import si.budimir.velocityutils.config.data.CustomMessagesData
 import si.budimir.velocityutils.config.data.MainConfigData
 import si.budimir.velocityutils.enums.Constants
+import si.budimir.velocityutils.listeners.ConnectionListener
 import si.budimir.velocityutils.util.MessageHelper
 import java.nio.file.Path
 import java.time.Duration
@@ -43,8 +46,12 @@ class VelocityUtilsMain {
     // Config
     lateinit var mainConfigObj: MainConfig
     lateinit var mainConfig: MainConfigData
+
     lateinit var aliasConfigObj: AliasConfig
     lateinit var aliasConfig: AliasConfigData
+
+    lateinit var customMessagesConfigObj: CustomMessagesConfig
+    lateinit var customMessagesConfig: CustomMessagesData
 
     // Alias Manager
     lateinit var aliasManager: AliasManager
@@ -75,6 +82,9 @@ class VelocityUtilsMain {
         aliasConfigObj = AliasConfig(this)
         aliasConfig = aliasConfigObj.getConfig()
 
+        customMessagesConfigObj = CustomMessagesConfig(this)
+        customMessagesConfig = customMessagesConfigObj.getConfig()
+
         // Init alias manager
         aliasManager = AliasManager(this)
         aliasManager.registerCommands()
@@ -82,6 +92,9 @@ class VelocityUtilsMain {
         // Register command(s)
         velocityUtilsCommand = VelocityUtilsCommand(this)
         commandManager.register("vutils", velocityUtilsCommand)
+
+        // Connection Events
+        server.eventManager.register(this, ConnectionListener(this))
 
         val loadTime = Duration.between(startTime, Instant.now())
         logger.info("VelocityUtils loaded (took ${loadTime.toMillis()}ms)")

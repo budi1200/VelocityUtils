@@ -14,6 +14,7 @@ class ReloadCommand : SubCommandBase {
 
         reloadResults["main.conf"] = plugin.mainConfigObj.reloadConfig()
         reloadResults["alias.conf"] = plugin.aliasConfigObj.reloadConfig()
+        reloadResults["custom-messages.conf"] = plugin.customMessagesConfigObj.reloadConfig()
 
         val failedReloads = reloadResults.filterValues { !it }
         if (failedReloads.isNotEmpty()) {
@@ -23,6 +24,10 @@ class ReloadCommand : SubCommandBase {
             )
             return
         }
+
+        plugin.mainConfig = plugin.mainConfigObj.getConfig()
+        plugin.aliasConfig = plugin.aliasConfigObj.getConfig()
+        plugin.customMessagesConfig = plugin.customMessagesConfigObj.getConfig()
 
         MessageHelper.reloadPrefix()
         MessageHelper.sendMessage(invocation.source(), "<green>Plugin Reloaded!")

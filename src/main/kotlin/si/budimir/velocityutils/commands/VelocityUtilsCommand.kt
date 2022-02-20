@@ -4,6 +4,8 @@ import com.velocitypowered.api.command.SimpleCommand
 import com.velocitypowered.api.proxy.ConsoleCommandSource
 import si.budimir.velocityutils.VelocityUtilsMain
 import si.budimir.velocityutils.commands.subcommands.HelpCommand
+import si.budimir.velocityutils.commands.subcommands.JoinMessageCommand
+import si.budimir.velocityutils.commands.subcommands.LeaveMessageCommand
 import si.budimir.velocityutils.commands.subcommands.ReloadCommand
 import si.budimir.velocityutils.util.MessageHelper
 import java.util.concurrent.CompletableFuture
@@ -15,6 +17,8 @@ class VelocityUtilsCommand(private val plugin: VelocityUtilsMain) : SimpleComman
     init {
         subCommands["help"] = HelpCommand()
         subCommands["reload"] = ReloadCommand()
+        subCommands["joinmessage"] = JoinMessageCommand()
+        subCommands["leavemessage"] = LeaveMessageCommand()
 
         subCommandsList = subCommands.keys.toList()
     }
@@ -70,5 +74,27 @@ class VelocityUtilsCommand(private val plugin: VelocityUtilsMain) : SimpleComman
 
     fun getSubCommands(): MutableMap<String, SubCommandBase> {
         return subCommands
+    }
+
+    companion object {
+        private val possibleMessageSuggestions = mutableListOf("set", "clear")
+
+        fun getJoinLeaveTabSuggestions(args: Array<out String>): MutableList<String> {
+            val suggestions = mutableListOf<String>()
+
+            if (args.size == 2) {
+                if (args[1].isEmpty()) {
+                    suggestions.add("<set|clear> [message]")
+                } else {
+                    suggestions.addAll(possibleMessageSuggestions.filter { it.contains(args[1], ignoreCase = true) })
+                }
+            }
+
+            if (args.size == 3 && args[2].isEmpty() && args[1] != "clear") {
+                suggestions.add("[message]")
+            }
+
+            return suggestions
+        }
     }
 }
