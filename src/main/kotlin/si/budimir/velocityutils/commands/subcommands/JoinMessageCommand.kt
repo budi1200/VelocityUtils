@@ -1,15 +1,16 @@
 package si.budimir.velocityutils.commands.subcommands
 
 import com.velocitypowered.api.command.SimpleCommand
-import com.velocitypowered.api.proxy.Player
+import si.budimir.velocityutils.VelocityUtilsMain
 import si.budimir.velocityutils.commands.SubCommandBase
 import si.budimir.velocityutils.commands.VelocityUtilsCommand
 import si.budimir.velocityutils.enums.Permissions
 import si.budimir.velocityutils.util.MessageHelper
 
-class JoinMessageCommand : SubCommandBase {
+class JoinMessageCommand(private val plugin: VelocityUtilsMain) : SubCommandBase {
 
     override fun execute(invocation: SimpleCommand.Invocation) {
+        val commandExecutor = invocation.source()
         val args = invocation.arguments()
 
         if (args.size < 2) return
@@ -21,9 +22,11 @@ class JoinMessageCommand : SubCommandBase {
             return
         }
 
-        // Set custom join message
-        println("Setting custom message to ${args[2]}")
-        invocation.source().sendMessage(MessageHelper.parseWithPermissions(invocation.source() as Player, args[2]))
+        // TODO: Set custom join message
+
+        // Inform player
+        val permissionParsedMessage = MessageHelper.parseWithPermissions(commandExecutor, args[2])
+        MessageHelper.sendMessage(commandExecutor, MessageHelper.parseString(plugin.mainConfig.lang.joinMessageChanged).append(permissionParsedMessage))
     }
 
     override fun suggestAsync(invocation: SimpleCommand.Invocation): MutableList<String> {

@@ -20,25 +20,31 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach 
 
 repositories {
     mavenCentral()
-    maven(url = uri("https://nexus.velocitypowered.com/repository/maven-public/"))
+    maven {
+        name = "papermc"
+        url = uri("https://papermc.io/repo/repository/maven-public/")
+    }
 }
+
+val velocityVersion = "3.1.2-SNAPSHOT"
+val configurateVersion = "4.1.2"
+val adventureVersion = "4.10.1"
 
 dependencies {
     implementation(kotlin("stdlib"))
     implementation(kotlin("stdlib-jdk8"))
 
     // Velocity
-    compileOnly("com.velocitypowered:velocity-api:3.0.1")
-    kapt("com.velocitypowered:velocity-api:3.0.1")
+    compileOnly("com.velocitypowered:velocity-api:$velocityVersion")
+    kapt("com.velocitypowered:velocity-api:$velocityVersion")
 
     // Configurate
-    implementation("org.spongepowered:configurate-hocon:4.1.2")
-    implementation("org.spongepowered:configurate-extra-kotlin:4.1.2")
-    implementation("net.kyori:adventure-serializer-configurate4:4.9.3")
+    implementation("org.spongepowered:configurate-hocon:$configurateVersion")
+    implementation("org.spongepowered:configurate-extra-kotlin:$configurateVersion")
+    implementation("net.kyori:adventure-serializer-configurate4:$adventureVersion")
 
     // Adventure
-    implementation("net.kyori:adventure-extra-kotlin:4.9.3")
-    implementation("net.kyori:adventure-text-minimessage:4.2.0-SNAPSHOT")
+    implementation("net.kyori:adventure-extra-kotlin:$adventureVersion")
 }
 
 tasks.shadowJar {
@@ -46,10 +52,6 @@ tasks.shadowJar {
     project.configurations.implementation.get().isCanBeResolved = true
     configurations = mutableListOf(project.configurations.implementation.get()) as List<FileCollection>?
 
-    relocate(
-        "net.kyori.adventure.text.minimessage",
-        "si.budimir.velocityutils.libs.net.kyori.adventure.text.minimessage"
-    )
     relocate("org.spongepowered", "si.budimir.velocityutils.libs.org.spongepowered")
 }
 

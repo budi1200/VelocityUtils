@@ -1,14 +1,32 @@
 package si.budimir.velocityutils.commands.subcommands
 
 import com.velocitypowered.api.command.SimpleCommand
+import si.budimir.velocityutils.VelocityUtilsMain
 import si.budimir.velocityutils.commands.SubCommandBase
 import si.budimir.velocityutils.commands.VelocityUtilsCommand
 import si.budimir.velocityutils.enums.Permissions
+import si.budimir.velocityutils.util.MessageHelper
 
-class LeaveMessageCommand : SubCommandBase {
+class LeaveMessageCommand(private val plugin: VelocityUtilsMain) : SubCommandBase {
 
     override fun execute(invocation: SimpleCommand.Invocation) {
-        TODO("Not yet implemented")
+        val commandExecutor = invocation.source()
+        val args = invocation.arguments()
+
+        if (args.size < 2) return
+
+        // Check for clear arg
+        if (args[1] == "clear") {
+            // TODO: Clear custom leave message
+            println("Clearing custom leave message")
+            return
+        }
+
+        // TODO: Set custom leave message
+
+        // Inform player
+        val permissionParsedMessage = MessageHelper.parseWithPermissions(commandExecutor, args[2])
+        MessageHelper.sendMessage(commandExecutor, MessageHelper.parseString(plugin.mainConfig.lang.leaveMessageChanged).append(permissionParsedMessage))
     }
 
     override fun suggestAsync(invocation: SimpleCommand.Invocation): MutableList<String> {
