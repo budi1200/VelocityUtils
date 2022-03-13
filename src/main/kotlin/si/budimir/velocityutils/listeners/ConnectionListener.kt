@@ -37,7 +37,6 @@ class ConnectionListener(private val plugin: VelocityUtilsMain) {
             message = plugin.customMessagesConfig.customMessages[player.uniqueId]?.customJoinMessage ?: message
 
         // Message stuff
-        plugin.logger.info(message.toString())
         val audience = Audience.audience(plugin.server.allPlayers)
         MessageHelper.sendMessage(audience, message, false)
     }
