@@ -19,7 +19,6 @@ class ConnectionListener(private val plugin: VelocityUtilsMain) {
 
     @Subscribe(order = PostOrder.LAST)
     fun onPlayerConnected(event: ServerPostConnectEvent) {
-
         // Exit if player changed servers
         if (event.previousServer != null) return
 
@@ -31,15 +30,16 @@ class ConnectionListener(private val plugin: VelocityUtilsMain) {
         if (player.hasPermission(Permissions.SILENT.getPermission())) return
 
         // Custom message handler
-        var message = plugin.mainConfig.defaultJoinMessage
+        val placeholders = hashMapOf("player" to event.player.username)
+        var message = MessageHelper.parseString(plugin.mainConfig.defaultJoinMessage, placeholders)
 
         if (player.hasPermission(Permissions.USE_CUSTOM_MESSAGES.getPermission()))
             message = plugin.customMessagesConfig.customMessages[player.uniqueId]?.customJoinMessage ?: message
 
         // Message stuff
+        plugin.logger.info(message.toString())
         val audience = Audience.audience(plugin.server.allPlayers)
-        val placeholders = hashMapOf("player" to event.player.username)
-        MessageHelper.sendMessage(audience, message, placeholders, false)
+        MessageHelper.sendMessage(audience, message, false)
     }
 
     @Subscribe(order = PostOrder.LAST)
@@ -65,14 +65,14 @@ class ConnectionListener(private val plugin: VelocityUtilsMain) {
         if (player.hasPermission(Permissions.SILENT.getPermission())) return
 
         // Custom message handler
-        var message = plugin.mainConfig.defaultJoinMessage
+        val placeholders = hashMapOf("player" to player.username)
+        var message = MessageHelper.parseString(plugin.mainConfig.defaultLeaveMessage, placeholders)
 
         if (player.hasPermission(Permissions.USE_CUSTOM_MESSAGES.getPermission()))
             message = plugin.customMessagesConfig.customMessages[player.uniqueId]?.customLeaveMessage ?: message
 
         // Message stuff
         val audience = Audience.audience(plugin.server.allPlayers)
-        val placeholders = hashMapOf("player" to player.username)
-        MessageHelper.sendMessage(audience, message, placeholders, false)
+        MessageHelper.sendMessage(audience, message, false)
     }
 }

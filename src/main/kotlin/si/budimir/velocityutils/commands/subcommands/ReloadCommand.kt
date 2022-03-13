@@ -28,6 +28,7 @@ class ReloadCommand : SubCommandBase {
         plugin.mainConfig = plugin.mainConfigObj.getConfig()
         plugin.aliasConfig = plugin.aliasConfigObj.getConfig()
         plugin.customMessagesConfig = plugin.customMessagesConfigObj.getConfig()
+        plugin.aliasManager.reloadCommands()
 
         MessageHelper.reloadPrefix()
         MessageHelper.sendMessage(invocation.source(), "<green>Plugin Reloaded!")

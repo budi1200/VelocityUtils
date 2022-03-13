@@ -17,8 +17,8 @@ class VelocityUtilsCommand(private val plugin: VelocityUtilsMain) : SimpleComman
     init {
         subCommands["help"] = HelpCommand()
         subCommands["reload"] = ReloadCommand()
-        subCommands["joinmessage"] = JoinMessageCommand()
-        subCommands["leavemessage"] = LeaveMessageCommand()
+        subCommands["joinmessage"] = JoinMessageCommand(plugin)
+        subCommands["leavemessage"] = LeaveMessageCommand(plugin)
 
         subCommandsList = subCommands.keys.toList()
     }

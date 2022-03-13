@@ -1,7 +1,6 @@
 package si.budimir.velocityutils.util
 
 import com.velocitypowered.api.command.CommandSource
-import com.velocitypowered.api.proxy.Player
 import net.kyori.adventure.audience.ForwardingAudience
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextDecoration
@@ -65,8 +64,7 @@ abstract class MessageHelper {
 
         fun sendMessage(
             audience: ForwardingAudience,
-            rawMessage: String,
-            placeholders: Map<String, String>,
+            rawMessage: Component,
             prefix: Boolean = true
         ) {
             var output = Component.text("")
@@ -75,7 +73,7 @@ abstract class MessageHelper {
             if (prefix)
                 output = output.append(pluginPrefix)
 
-            output = output.append(parseString(rawMessage, placeholders))
+            output = output.append(rawMessage)
 
             audience.sendMessage(output)
         }
@@ -124,6 +122,7 @@ abstract class MessageHelper {
             }
 
             val gatedMiniMessage = miniMessageBuilder.tags(allowedTags.build()).build()
+            plugin.logger.info(placeholders.toString())
             val resolver = TagResolver.resolver(placeholders.map { Placeholder.parsed(it.key, it.value) })
 
             return gatedMiniMessage.deserialize(key, resolver)

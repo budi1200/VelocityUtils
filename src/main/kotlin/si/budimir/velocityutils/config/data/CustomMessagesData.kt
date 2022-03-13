@@ -1,5 +1,6 @@
 package si.budimir.velocityutils.config.data
 
+import net.kyori.adventure.text.Component
 import org.spongepowered.configurate.objectmapping.ConfigSerializable
 import java.util.*
 
@@ -10,6 +11,6 @@ data class CustomMessagesData(
 
 @ConfigSerializable
 data class CustomMessage(
-    val customJoinMessage: String?,
-    val customLeaveMessage: String?
+    var customJoinMessage: Component?,
+    var customLeaveMessage: Component?
 )

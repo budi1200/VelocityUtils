@@ -1,5 +1,6 @@
 package si.budimir.velocityutils.config
 
+import net.kyori.adventure.serializer.configurate4.ConfigurateComponentSerializer
 import org.spongepowered.configurate.CommentedConfigurationNode
 import org.spongepowered.configurate.ConfigurateException
 import org.spongepowered.configurate.hocon.HoconConfigurationLoader
@@ -23,6 +24,7 @@ open class ConfigBase<T>(private val plugin: VelocityUtilsMain, fileName: String
             options.shouldCopyDefaults(true)
             options.serializers { builder ->
                 builder.registerAnnotatedObjects(objectMapperFactory())
+                builder.registerAll(ConfigurateComponentSerializer.configurate().serializers())
             }
         }
         .build()
@@ -58,9 +60,20 @@ open class ConfigBase<T>(private val plugin: VelocityUtilsMain, fileName: String
         return config!!
     }
 
+    fun saveConfig(data: T) {
+        try {
+            val node: CommentedConfigurationNode = loader.load()
+
+            node[clazz] = data
+            loader.save(node)
+        } catch (exception: ConfigurateException) {
+            logger.error("Could not save configuration: ${exception.message}")
+        }
+    }
+
     private fun saveDefaultConfig() {
         if (!dataDirectory.exists())
-            dataDirectory.createDirectory();
+            dataDirectory.createDirectory()
 
         try {
             val node: CommentedConfigurationNode = loader.load()

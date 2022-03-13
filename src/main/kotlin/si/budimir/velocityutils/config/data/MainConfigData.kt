@@ -12,8 +12,11 @@ data class MainConfigData(
 
 @ConfigSerializable
 data class Lang(
+    val joinMessageCleared: String = "<green>Join message removed",
     val joinMessageChanged: String = "<white>Changed join message to: ",
+    val leaveMessageCleared: String = "<green>Leave message removed",
     val leaveMessageChanged: String = "<white>Changed leave message to: ",
+    val errorOccurred: String = "<white>An error occurred! Contact an admin",
     val missingPermission: String = "<red>Missing permission!",
     val invalidUsage: String = "<red>Invalid usage!"
 )
