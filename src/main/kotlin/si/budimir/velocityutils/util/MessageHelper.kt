@@ -122,7 +122,6 @@ abstract class MessageHelper {
             }
 
             val gatedMiniMessage = miniMessageBuilder.tags(allowedTags.build()).build()
-            plugin.logger.info(placeholders.toString())
             val resolver = TagResolver.resolver(placeholders.map { Placeholder.parsed(it.key, it.value) })
 
             return gatedMiniMessage.deserialize(key, resolver)
